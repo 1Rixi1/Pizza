@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-function PizzaBlock({ title, price, imageUrl, sizes, types }) {
+function PizzaBlock({ title, price, imageUrl, sizes, types, id }) {
 
   const [activeType, setActiveType] = React.useState(0)
 
@@ -13,8 +13,7 @@ function PizzaBlock({ title, price, imageUrl, sizes, types }) {
 
 
   return (
-    <div className="pizza-block">
-
+    <div key={id} className="pizza-block">
 
       <img
         className="pizza-block__image"
