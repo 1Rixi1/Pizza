@@ -3,10 +3,11 @@ import Categories from '../components/Categories'
 import Sort from '../components/Sort'
 import PizzaBlock from '../components/Pizzablock';
 import Skeleton from '../components/Pizzablock/Skeleton'
+import Pagination from '../components/Pagination';
 
 
 
-const Home = () => {
+const Home = ({ searchValue, setSearchValue }) => {
 
   const [items, setItems] = React.useState([])
 
@@ -14,21 +15,24 @@ const Home = () => {
 
   const [categoryId, setCategoryId] = React.useState(0)
 
+  const [currentPage, setCurrentPage] = React.useState(1)
+
   const [sortType, setSortType] = React.useState({
     name: 'Популярности',
     sortProperty: 'rating'
   })
 
 
-  const category = categoryId > 0 ? `category=${categoryId}` : ''
-  const sortBy = sortType.sortProperty.replace('-', '')
-  const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc'
+  const category = categoryId > 0 ? `category=${categoryId}` : '';
+  const sortBy = sortType.sortProperty.replace('-', '');
+  const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
+  const search = searchValue ? `&search=${searchValue}` : '';
 
 
   React.useEffect(() => {
     setIsLoading(true)
 
-    fetch(`https://62cd07e7a43bf78008509237.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}`)
+    fetch(`https://62cd07e7a43bf78008509237.mockapi.io/items?limit=4&page=${currentPage}&${category}&sortBy=${sortBy}&order=${order}${search}`)
 
 
 
@@ -38,7 +42,10 @@ const Home = () => {
         setIsLoading(false)
       })
     window.scrollTo(0, 0)
-  }, [categoryId, sortType])
+  }, [categoryId, sortType, searchValue, currentPage])
+
+  const pizzas = items.map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)
+  const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />)
 
   return (
     <div className="container">
@@ -48,15 +55,9 @@ const Home = () => {
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
-        {
-          isLoading ?
-            [...new Array(6)].map((_, index) => <Skeleton key={index} />)
-            :
-            items.map(pizza =>
-              <PizzaBlock key={pizza.id} {...pizza} />
-            )
-        }
+        {isLoading ? skeletons : pizzas}
       </div>
+      <Pagination onChangePage={(number) => setCurrentPage(number)} />
     </div>
   )
 }
