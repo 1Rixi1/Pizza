@@ -3,6 +3,20 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { setSort } from "../redux/slices/filterSlice";
 
+
+
+
+export const list = [
+  { name: 'популярности (DESK)', sortProperty: 'rating' },
+  { name: 'популярности (ASC)', sortProperty: '-rating' },
+  { name: 'цене (DESK)', sortProperty: 'price' },
+  { name: 'цене (ASC)', sortProperty: '-price' },
+  { name: 'алфавиту (DESK)', sortProperty: 'title' },
+  { name: 'алфавиту (ASC)', sortProperty: '-title' },
+]
+
+
+
 function Sort() {
 
   const dispatch = useDispatch();
@@ -11,15 +25,6 @@ function Sort() {
 
   const [isVisiable, setIsVisiable] = React.useState(false);
 
-
-  const list = [
-    { name: 'популярности (DESK)', sortProperty: 'rating' },
-    { name: 'популярности (ASC)', sortProperty: '-rating' },
-    { name: 'цене (DESK)', sortProperty: 'price' },
-    { name: 'цене (ASC)', sortProperty: '-price' },
-    { name: 'алфавиту (DESK)', sortProperty: 'title' },
-    { name: 'алфавиту (ASC)', sortProperty: '-title' },
-  ]
 
   const onClickListItem = (obj) => {
     dispatch(setSort(obj))
